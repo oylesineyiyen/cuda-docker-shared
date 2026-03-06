@@ -1,0 +1,60 @@
+services:
+  app1:
+    build:
+      context: .
+      dockerfile: ./app1/Dockerfile
+    runtime: nvidia
+    privileged: true 
+    ipc: host       
+    pid: host       
+    volumes:
+      - ./shared_ipc:/tmp/shared_ipc
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  app2:
+    build: { context: ., dockerfile: ./app2/Dockerfile }
+    runtime: nvidia
+    privileged: true
+    ipc: host
+    pid: host
+    depends_on: [app1]
+    volumes:
+      - ./shared_ipc:/tmp/shared_ipc
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
+
+  app3:
+    build: { context: ., dockerfile: ./app3/Dockerfile }
+    runtime: nvidia
+    privileged: true
+    ipc: host
+    pid: host
+    depends_on: [app1]
+    volumes:
+      - ./shared_ipc:/tmp/shared_ipc
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
+
+  app4:
+    build: { context: ., dockerfile: ./app4/Dockerfile }
+    runtime: nvidia
+    privileged: true
+    ipc: host
+    pid: host
+    depends_on: [app1]
+    volumes:
+      - ./shared_ipc:/tmp/shared_ipc
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: 1, capabilities: [gpu]}]
