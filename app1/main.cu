@@ -29,13 +29,8 @@ int main(){
     init_half_matrix<<<blocksPerGrid, threadsPerBlock>>>(d_a, 0.03125f, M*K);
     init_half_matrix<<<blocksPerGrid, threadsPerBlock>>>(d_b, 2.0f, M*K);
 
-    // Doldurma işleminin bitmesini bekle
-    //Configuring warp
-    dim3 gridDim(1,1);
-    dim3 blockDim(32,1);
-
     //executing tensor kernel
-    wmma_multiply_kernel<<<gridDim, blockDim>>>(d_a,d_b,d_c);
+    wmma_multiply_kernel<<<1, 32>>>(d_a, d_b, d_c);
 
     cudaDeviceSynchronize();
 
